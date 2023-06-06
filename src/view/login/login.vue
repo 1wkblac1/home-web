@@ -1,8 +1,8 @@
 <template>
   <div class="login">
-    <div class="team-name hidden-sm-and-down"><img src="@/assets/image/login/team-name.png" alt="logo" /></div>
+    <div class="team-name hidden-sm-and-down"></div>
     <div class="form-box" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-      <div class="title"><h1 title="Lin">Lin CMS</h1></div>
+      <div class="title"><h1 title="Lin">张多多 生活馆</h1></div>
       <form class="login-form" autocomplete="off" @submit.prevent="throttleLogin()">
         <div class="form-item nickname">
           <span class="icon account-icon"></span>
@@ -32,8 +32,8 @@ export default {
       wait: 2000, // 2000ms之内不能重复发起请求
       throttleLogin: null, // 节流登录
       form: {
-        username: 'root',
-        password: '123456',
+        username: '',
+        password: '',
       },
     }
   },
@@ -56,7 +56,7 @@ export default {
       try {
         // 尝试获取当前用户信息
         const user = await User.getPermissions()
-        this.setUserAndState(user)
+        this.setUserAndState(user.result)
         this.setUserPermissions(user.permissions)
       } catch (e) {
         console.log(e)
@@ -79,7 +79,7 @@ export default {
 .login {
   width: 100%;
   height: 100%;
-  background: #1b2c5f url('../../assets/image/login/login-ba.png') no-repeat center center;
+  background: #1b2c5f;
   background-size: cover;
 
   .team-name {

@@ -1,6 +1,7 @@
 import adminConfig from './admin'
-import bookConfig from './book' // 引入图书管理路由文件
 import pluginsConfig from './plugin'
+import columnConfig from './column'
+import cameraConfig from './camera'
 import Utils from '@/lin/util/util'
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -13,8 +14,9 @@ let homeRouter = [
     filePath: 'view/about/about.vue',
     inNav: true,
     icon: 'iconfont icon-iconset0103',
-    order: 1,
   },
+  columnConfig,
+  cameraConfig,
   {
     title: '日志管理',
     type: 'view',
@@ -23,7 +25,6 @@ let homeRouter = [
     filePath: 'view/log/log.vue',
     inNav: true,
     icon: 'iconfont icon-rizhiguanli',
-    order: 2,
     permission: ['查询所有日志'],
   },
   {
@@ -44,7 +45,6 @@ let homeRouter = [
     inNav: false,
     icon: 'iconfont icon-rizhiguanli',
   },
-  bookConfig,
   adminConfig,
 ]
 

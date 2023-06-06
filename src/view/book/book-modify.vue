@@ -33,37 +33,30 @@
 </template>
 
 <script>
-import book from '@/model/book'
+import Column from '@/model/column'
 
 export default {
   props: {
-    editBookID: {
+    editID: {
       type: Number,
     },
   },
   data() {
     return {
       loading: false,
-      form: {
-        title: '',
-        author: '',
-        summary: '',
-        image: '',
-      },
+      form: {},
     }
   },
   async mounted() {
     this.loading = true
-    this.form = await book.getBook(this.editBookID)
+    this.form = await Column.columnDetail({ id: this.editID })
     this.loading = false
   },
   methods: {
     async submitForm() {
-      const res = await book.editBook(this.editBookID, this.form)
-      if (res.code < window.MAX_SUCCESS_CODE) {
-        this.$message.success(`${res.message}`)
-        this.$emit('editClose')
-      }
+      const res = await Column.editColumn(this.editID, this.form)
+      this.$message.success(`${res.message}`)
+      this.$emit('editClose')
     },
     // 重置表单
     resetForm(formName) {

@@ -1,67 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="./iconfont.css" />
-    <script src="//at.alicdn.com/t/font_1104271_so151lbumpq.js"></script>
-    <title>lin-cms</title>
-    <style>
-      #loader {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        top: 0;
-        background:#fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: display 1s ease .5s;
-      }
-      .loader-logo {
-        width: 60px;
-        height: 91px;
-        position: fixed;
-        left: 20%;
-        top: 43%;
-      }
-      .spinner {
-        position: relative;
-        line-height: 0;
-        box-sizing: border-box;
-        width: 40px;
-        height: 40px;
-        color: #3963bc;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="./iconfont.css" />
+  <script src="//at.alicdn.com/t/font_1104271_so151lbumpq.js"></script>
+  <title>Home</title>
+  <style>
+    #loader {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      background:#fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: display 1s ease .5s;
+    }
+    .loader-logo {
+      width: 60px;
+      height: 91px;
+      position: fixed;
+      left: 20%;
+      top: 43%;
+    }
+    .spinner {
+      position: relative;
+      line-height: 0;
+      box-sizing: border-box;
+      width: 40px;
+      height: 40px;
+      color: #3963bc;
+    }
 
-      .spinner:before {
-        content: '';
-        width: 100%;
-        height: 20%;
-        min-width: 5px;
-        background: #000;
-        opacity: 0.1;
-        position: absolute;
-        bottom: 0%;
-        left: 0;
-        border-radius: 50%;
-        animation: rotate-square-2-shadow .5s linear infinite;
-      }
-      .spinner:after {
-        content: '';
-        width: 100%;
-        height: 100%;
-        background: #3963bc;
-        animation: rotate-square-2-animate .5s linear infinite;
-        position: absolute;
-        bottom:40%;
-        left: 0;
-        border-radius: 3px;
-      }
-    
+    .spinner:before {
+      content: '';
+      width: 100%;
+      height: 20%;
+      min-width: 5px;
+      background: #000;
+      opacity: 0.1;
+      position: absolute;
+      bottom: 0%;
+      left: 0;
+      border-radius: 50%;
+      animation: rotate-square-2-shadow .5s linear infinite;
+    }
+    .spinner:after {
+      content: '';
+      width: 100%;
+      height: 100%;
+      background: #3963bc;
+      animation: rotate-square-2-animate .5s linear infinite;
+      position: absolute;
+      bottom:40%;
+      left: 0;
+      border-radius: 3px;
+    }
+
 
     @keyframes rotate-square-2-animate {
       17% {
@@ -90,16 +90,35 @@
         transform: scale(1.2, 1);
       }
     }
-    </style>
-  </head>
+    @font-face{
+      font-family:YYW01;
+      src:url('./static/fonts/TsangerYuYangT_W01_W01.ttf')
+    }
+    @font-face{
+      font-family:YYW02;
+      src:url('./static/fonts/TsangerYuYangT_W02_W02.ttf')
+    }
+    @font-face{
+      font-family:YYW03;
+      src:url('./static/fonts/TsangerYuYangT_W03_W03.ttf')
+    }
+    @font-face{
+      font-family:YYW04;
+      src:url('./static/fonts/TsangerYuYangT_W04_W04.ttf')
+    }
+    @font-face{
+      font-family:YYW05;
+      src:url('./static/fonts/TsangerYuYangT_W05_W05.ttf')
+    }
+  </style>
+</head>
 
-  <body>
+<body>
 
-    <div id="loader">
-        <div class="spinner spinner--rotate-square-2"></div>
-        <img src="./static/img/logo.png" alt="" class="loader-logo">
-    </div>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+<div id="loader">
+  <div class="spinner spinner--rotate-square-2"></div>
+</div>
+<div id="app"></div>
+<!-- built files will be auto injected -->
+</body>
 </html>

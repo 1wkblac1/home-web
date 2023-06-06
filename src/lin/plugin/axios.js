@@ -2,9 +2,9 @@
 import Vue from 'vue'
 import axios from 'axios'
 import Config from '@/config'
-import ErrorCode from '@/config/error-code'
+// import ErrorCode from '@/config/error-code'
 import store from '@/store'
-import { getToken, saveAccessToken } from '@/lin/util/token'
+import { getToken } from '@/lin/util/token'
 
 const config = {
   baseURL: Config.baseURL || process.env.apiUrl || '',
@@ -19,12 +19,14 @@ const config = {
 }
 
 /**
- * 错误码是否是refresh相关
+ * 错误码是否是token相关
  * @param {number} code 错误码
+ * 10100 过期
+ * 10101 不存在
  */
-function refreshTokenException(code) {
+function accessTokenException(code) {
   let flag = false
-  const codes = [10000, 10042, 10050, 10052]
+  const codes = [10100, 10101]
   if (codes.includes(code)) {
     flag = true
   }
@@ -89,10 +91,11 @@ _axios.interceptors.request.use(
         })
         reqConfig.data = formData
       }
-    } else {
-      // TODO: 其他类型请求数据格式处理
-      /* eslint-disable-next-line */
-      console.warn(`其他请求类型: ${reqConfig.method}, 暂无自动处理`)
+    }
+    // 防止字段用错
+    if (!reqConfig.data) {
+      // 防止字段用错
+      reqConfig.data = reqConfig.params || {}
     }
     // step2: permission 处理
     if (reqConfig.url === 'cms/user/refresh') {
@@ -107,6 +110,7 @@ _axios.interceptors.request.use(
       if (accessToken) {
         // eslint-disable-next-line no-param-reassign
         reqConfig.headers.Authorization = accessToken
+        reqConfig.headers.TargetType = 1 // 登录类型 后台
       }
     }
     return reqConfig
@@ -116,7 +120,7 @@ _axios.interceptors.request.use(
   },
 )
 
-// Add a response interceptor
+// 响应拦截器
 _axios.interceptors.response.use(
   async res => {
     let { code, message } = res.data // eslint-disable-line
@@ -124,10 +128,10 @@ _axios.interceptors.response.use(
       return res.data
     }
     return new Promise(async (resolve, reject) => {
-      const { url } = res.config
+      // const { url } = res.config
 
       // refreshToken相关，直接登出
-      if (refreshTokenException(code)) {
+      if (accessTokenException(code)) {
         setTimeout(() => {
           store.dispatch('loginOut')
           const { origin } = window.location
@@ -135,38 +139,12 @@ _axios.interceptors.response.use(
         }, 1500)
         return resolve(null)
       }
-      // assessToken相关，刷新令牌
-      if (code === 10041 || code === 10051) {
-        const cache = {}
-        if (cache.url !== url) {
-          cache.url = url
-          const refreshResult = await _axios('cms/user/refresh')
-          saveAccessToken(refreshResult.access_token)
-          // 将上次失败请求重发
-          const result = await _axios(res.config)
-          return resolve(result)
-        }
-      }
-      // 第一种情况：默认直接提示后端返回的异常信息；特殊情况：如果本次请求添加了 handleError: true，用户自己try catch，框架不做处理
-      if (res.config.handleError) {
-        return reject(res)
-      }
-      // 第二种情况：采用前端自己的一套异常提示信息；特殊情况：如果本次请求添加了 showBackend: true, 弹出后端返回错误信息。
-      if (Config.useFrontEndErrorMsg && !res.config.showBackend) {
-        // 弹出前端自定义错误信息
-        const errorArr = Object.entries(ErrorCode).filter(v => v[0] === code.toString())
-        // 匹配到前端自定义的错误码
-        if (errorArr.length > 0 && errorArr[0][1] !== '') {
-          message = errorArr[0][1] // eslint-disable-line
-        } else {
-          message = ErrorCode['777']
-        }
-      }
-
+      // 全部采用后端错误处理
       Vue.prototype.$message({
         message,
         type: 'error',
       })
+      console.log(1)
       reject()
     })
   },
@@ -179,6 +157,7 @@ _axios.interceptors.response.use(
       })
       console.log('error', error)
     }
+    console.log(2)
 
     // 判断请求超时
     if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {

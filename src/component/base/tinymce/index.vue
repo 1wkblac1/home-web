@@ -4,8 +4,8 @@
   </div>
 </template>
 <script>
-// eslint-disable-next-line
-import tinymce from 'tinymce/tinymce'
+import 'tinymce/tinymce'
+import 'tinymce/icons/default'
 import Editor from '@tinymce/tinymce-vue'
 import 'tinymce/themes/silver'
 import './import-all'
@@ -35,13 +35,16 @@ export default {
     },
     toolbar: {
       type: String,
-      default: ` undo redo 
-      | formatselect 
-      | bold italic strikethrough forecolor backcolor formatpainter 
-      | link image | alignleft aligncenter alignright alignjustify 
-      | numlist bullist outdent indent 
-      | removeformat 
-      | preview fullscreen code`,
+      default: ` undo redo
+      | fontsizeselect
+      | fontselect
+      | formatselect
+      | bold italic strikethrough forecolor backcolor formatpainter
+      | link image | alignleft aligncenter alignright alignjustify
+      | numlist bullist outdent indent
+      | removeformat
+      | preview fullscreen code
+      `,
     },
     baseUrl: {
       type: String,
@@ -73,9 +76,9 @@ export default {
       statusbar: false, // 隐藏编辑器底部的状态栏
       paste_data_images: true, // 允许粘贴图像
       menubar: this.showMenubar, // 隐藏最上方menu
-      plugins: `print fullpage searchreplace autolink directionality visualblocks 
-        visualchars template codesample charmap hr pagebreak nonbreaking anchor toc insertdatetime 
-        wordcount textpattern help advlist table lists paste preview fullscreen image imagetools code link`,
+      plugins: `print searchreplace autolink directionality visualblocks
+        visualchars template codesample charmap hr pagebreak nonbreaking anchor insertdatetime
+        wordcount textpattern help advlist table lists paste preview fullscreen image code link`,
       toolbar: this.toolbar,
       async images_upload_handler(blobInfo, success, failure) {
         const file = new File([blobInfo.blob()], blobInfo.filename(), {
@@ -84,14 +87,15 @@ export default {
         _this
           .$axios({
             method: 'post',
-            url: '/cms/file',
+            url: _this.upload_url,
             data: {
               file,
+              type: 1,
             },
           })
           .then(res => {
-            if (res[0] && res[0].url) {
-              success(res[0].url)
+            if (res && res.code === 10000) {
+              success(res.result.url)
             }
           })
           .catch(err => failure(err))
@@ -106,7 +110,8 @@ export default {
   watch: {
     content: {
       handler() {
-        this.$emit('change', this.content)
+        this.$emit('textChange', this.content)
+        console.log(this.content)
       },
     },
     defaultContent: {
